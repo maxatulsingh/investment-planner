@@ -1,3 +1,5 @@
+import Calculator from "@/components/calculator/Calculator";
+
 export default function Home() {
   return (
     <main className="min-h-screen bg-slate-50">
@@ -25,19 +27,11 @@ export default function Home() {
           </div>
         </div>
       </section>
+{/* Calculator Placeholder */}
 
-      {/* Calculator Placeholder */}
-      <section className="mx-auto max-w-5xl px-6 pb-20">
-        <div className="rounded-2xl bg-white p-8 shadow-lg">
-          <h2 className="text-2xl font-bold text-slate-900">
-            Compound Interest Calculator
-          </h2>
-
-          <p className="mt-2 text-slate-500">
-            Calculator UI coming in the next step.
-          </p>
-        </div>
-      </section>
+ <section className="mx-auto max-w-5xl px-6 pb-20">
+  <Calculator />
+</section>
     </main>
   );
 }
