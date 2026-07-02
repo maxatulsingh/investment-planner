@@ -4,6 +4,7 @@ import {
   Area,
   AreaChart,
   CartesianGrid,
+  Legend,
   ResponsiveContainer,
   Tooltip,
   XAxis,
@@ -34,33 +35,40 @@ export default function GrowthChart({
 }: GrowthChartProps) {
   return (
     <div className="mt-10 rounded-2xl bg-white p-6 shadow-xl">
+
       <h3 className="mb-6 text-2xl font-bold">
         📈 Investment Growth
       </h3>
 
-      <div className="h-[420px]">
+      <div className="h-[450px]">
         <ResponsiveContainer width="100%" height="100%">
+
           <AreaChart data={data}>
+
             <defs>
+
               <linearGradient
-                id="growth"
+                id="portfolio"
                 x1="0"
                 y1="0"
                 x2="0"
                 y2="1"
               >
-                <stop
-                  offset="5%"
-                  stopColor="#2563eb"
-                  stopOpacity={0.35}
-                />
-
-                <stop
-                  offset="95%"
-                  stopColor="#2563eb"
-                  stopOpacity={0}
-                />
+                <stop offset="5%" stopColor="#16a34a" stopOpacity={0.35} />
+                <stop offset="95%" stopColor="#16a34a" stopOpacity={0} />
               </linearGradient>
+
+              <linearGradient
+                id="invested"
+                x1="0"
+                y1="0"
+                x2="0"
+                y2="1"
+              >
+                <stop offset="5%" stopColor="#2563eb" stopOpacity={0.18} />
+                <stop offset="95%" stopColor="#2563eb" stopOpacity={0} />
+              </linearGradient>
+
             </defs>
 
             <CartesianGrid
@@ -68,9 +76,13 @@ export default function GrowthChart({
               opacity={0.25}
             />
 
-            <XAxis dataKey="year" />
+            <XAxis
+              dataKey="year"
+            />
 
-            <YAxis tickFormatter={formatAxis} />
+            <YAxis
+              tickFormatter={formatAxis}
+            />
 
             <Tooltip
               formatter={(value) =>
@@ -78,17 +90,31 @@ export default function GrowthChart({
               }
             />
 
+            <Legend />
+
             <Area
               type="monotone"
-              dataKey="value"
-              stroke="#2563eb"
+              dataKey="portfolioValue"
+              name="Portfolio Value"
+              stroke="#16a34a"
               strokeWidth={3}
-              fill="url(#growth)"
-              animationDuration={900}
+              fill="url(#portfolio)"
             />
+
+            <Area
+              type="monotone"
+              dataKey="totalInvested"
+              name="Total Invested"
+              stroke="#2563eb"
+              strokeWidth={2}
+              fill="url(#invested)"
+            />
+
           </AreaChart>
+
         </ResponsiveContainer>
       </div>
+
     </div>
   );
 }

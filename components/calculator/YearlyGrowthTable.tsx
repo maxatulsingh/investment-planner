@@ -1,13 +1,11 @@
 import { YearlyGrowth } from "@/types/investment";
 import { formatCurrency } from "@/lib/utils/currency";
 
-type YearlyGrowthTableProps = {
+type Props = {
   data: YearlyGrowth[];
 };
 
-export default function YearlyGrowthTable({
-  data,
-}: YearlyGrowthTableProps) {
+export default function YearlyGrowthTable({ data }: Props) {
   return (
     <div className="mt-10 rounded-2xl bg-white p-6 shadow-xl">
       <h3 className="mb-6 text-2xl font-bold">
@@ -15,24 +13,28 @@ export default function YearlyGrowthTable({
       </h3>
 
       <div className="overflow-x-auto">
-        <table className="w-full border-collapse">
-          <thead className="sticky top-0 bg-slate-100">
+        <table className="w-full border-collapse text-sm">
+          <thead className="bg-slate-100">
             <tr>
-              <th className="border-b py-4 text-left">Year</th>
+              <th className="p-3 text-left">Year</th>
 
-              <th className="border-b py-4 text-right">
-                SIP This Year
+              <th className="p-3 text-right">
+                Invested This Year
               </th>
 
-              <th className="border-b py-4 text-right">
+              <th className="p-3 text-right">
                 Total Invested
               </th>
 
-              <th className="border-b py-4 text-right">
-                Interest Earned
+              <th className="p-3 text-right">
+                Interest This Year
               </th>
 
-              <th className="border-b py-4 text-right">
+              <th className="p-3 text-right">
+                Total Interest
+              </th>
+
+              <th className="p-3 text-right">
                 Portfolio Value
               </th>
             </tr>
@@ -42,26 +44,28 @@ export default function YearlyGrowthTable({
             {data.map((item) => (
               <tr
                 key={item.year}
-                className="border-b odd:bg-white even:bg-slate-50 hover:bg-blue-50"
+                className="border-t hover:bg-slate-50"
               >
-                <td className="py-3">
-                  {item.year}
+                <td className="p-3">{item.year}</td>
+
+                <td className="p-3 text-right">
+                  {formatCurrency(item.investedThisYear)}
                 </td>
 
-                <td className="py-3 text-right">
-                  {formatCurrency(item.yearlyDeposit)}
+                <td className="p-3 text-right">
+                  {formatCurrency(item.totalInvested)}
                 </td>
 
-                <td className="py-3 text-right">
-                  {formatCurrency(item.totalDeposits)}
+                <td className="p-3 text-right text-green-600">
+                  {formatCurrency(item.interestThisYear)}
                 </td>
 
-                <td className="py-3 text-right text-green-600 font-medium">
-                  {formatCurrency(item.accruedInterest)}
+                <td className="p-3 text-right text-green-700 font-medium">
+                  {formatCurrency(item.totalInterest)}
                 </td>
 
-                <td className="py-3 text-right font-bold text-blue-700">
-                  {formatCurrency(item.balance)}
+                <td className="p-3 text-right font-bold text-blue-700">
+                  {formatCurrency(item.portfolioValue)}
                 </td>
               </tr>
             ))}

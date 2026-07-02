@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-
+import LifeEvents from "./LifeEvents";
 import { InvestmentInput } from "@/types/investment";
 import { calculateInvestmentProjection } from "@/lib/calculations/investmentEngine";
 import { formatCurrency } from "@/lib/utils/currency";
@@ -11,15 +11,29 @@ import ResultCard from "./ResultCard";
 import GrowthChart from "./GrowthChart";
 import YearlyGrowthTable from "./YearlyGrowthTable";
 
-export default function Calculator() {
-  const [form, setForm] = useState<InvestmentInput>({
-    initialInvestment: 100000,
-    monthlySip: 10000,
-    annualStepUp: 10,
-    annualRate: 12,
-    years: 20,
-    frequency: "Monthly",
-  });
+
+export default function Calculator() 
+{
+const [form, setForm] = useState<InvestmentInput>({
+  initialInvestment: 100000,
+  monthlySip: 10000,
+  annualStepUp: 10,
+  annualRate: 12,
+  years: 20,
+  frequency: "Monthly",
+
+lifeEvents: [
+  {
+    id: crypto.randomUUID(),
+    year: 15,
+    timing: "Beginning",
+    type: "Withdrawal",
+    title: "Child Education",
+    amount: 1000000,
+  },
+],
+});
+
 
 const result = useMemo(() => {
   return calculateInvestmentProjection(form);
@@ -34,6 +48,69 @@ const result = useMemo(() => {
       [field]: value,
     }));
   }
+
+  function sortLifeEvents(events: InvestmentInput["lifeEvents"]) {
+  return [...events].sort((a, b) => {
+    if (a.year !== b.year) {
+      return a.year - b.year;
+    }
+
+    // Beginning events before End events in the same year
+    if (a.timing === b.timing) {
+      return 0;
+    }
+
+    return a.timing === "Beginning" ? -1 : 1;
+  });
+}
+
+  function addLifeEvent() {
+  const newEvent = {
+    id: crypto.randomUUID(),
+    year: 1,
+    timing: "Beginning" as const,
+    type: "Withdrawal" as const,
+    title: "New Event",
+    amount: 100000,
+  };
+
+  setForm((prev) => ({
+    ...prev,
+    lifeEvents: sortLifeEvents([
+  ...prev.lifeEvents,
+  newEvent,
+]),
+  }));
+}
+
+function updateLifeEvent(
+  id: string,
+  field: string,
+  value: string | number
+) {
+  setForm((prev) => ({
+    ...prev,
+    lifeEvents: sortLifeEvents(
+  prev.lifeEvents.map((event) =>
+    event.id === id
+      ? {
+          ...event,
+          [field]: value,
+        }
+      : event
+  )
+),
+  }));
+}
+
+function deleteLifeEvent(id: string) {
+  setForm((prev) => ({
+    ...prev,
+    lifeEvents: prev.lifeEvents.filter(
+      (event) => event.id !== id
+    ),
+  }));
+}
 
   return (
     <div className="rounded-2xl bg-white p-8 shadow-xl">
@@ -121,6 +198,12 @@ const result = useMemo(() => {
       {/* Year-wise Table */}
 
       <YearlyGrowthTable data={result.yearlyGrowth} />
+      <LifeEvents
+  events={form.lifeEvents}
+  onAdd={addLifeEvent}
+  onUpdate={updateLifeEvent}
+  onDelete={deleteLifeEvent}
+/>
     </div>
   );
 }

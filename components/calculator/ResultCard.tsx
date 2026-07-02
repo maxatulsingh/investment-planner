@@ -12,18 +12,28 @@ export default function ResultCard({
   icon,
 }: ResultCardProps) {
   return (
-    <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition hover:-translate-y-1 hover:shadow-lg">
+    <div
+  className={`rounded-xl p-5 shadow transition ${
+    value.startsWith("-")
+      ? "bg-red-50 border border-red-200"
+      : "bg-green-50 border border-green-200"
+  }`}
+>
       <div className="flex items-center gap-3">
         <div className="flex h-12 w-12 items-center justify-center rounded-full bg-blue-100 text-2xl">
           {icon}
         </div>
 
         <div>
-          <p className="text-sm text-slate-500">{title}</p>
-
-          <h3 className="mt-1 text-2xl font-bold text-slate-900">
-            {value}
-          </h3>
+          <p
+  className={`mt-2 text-3xl font-bold ${
+    value.startsWith("-")
+      ? "text-red-600"
+      : "text-green-600"
+  }`}
+>
+  {value}
+</p>
         </div>
       </div>
     </div>

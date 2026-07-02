@@ -4,6 +4,28 @@ export type CompoundingFrequency =
   | "Half-Yearly"
   | "Yearly";
 
+export type EventType =
+  | "Deposit"
+  | "Withdrawal";
+
+export type EventTiming =
+  | "Beginning"
+  | "End";
+
+export interface LifeEvent {
+  id: string;
+
+  year: number;
+
+  timing: EventTiming;
+
+  type: EventType;
+
+  title: string;
+
+  amount: number;
+}
+
 export interface InvestmentInput {
   initialInvestment: number;
   monthlySip: number;
@@ -11,20 +33,24 @@ export interface InvestmentInput {
   annualRate: number;
   years: number;
   frequency: CompoundingFrequency;
+
+  lifeEvents: LifeEvent[];
 }
 
 export interface YearlyGrowth {
   year: number;
 
-  yearlyDeposit: number;
+  monthlySip: number;
 
-  totalDeposits: number;
+  investedThisYear: number;
 
-  yearlyInterest: number;
+  totalInvested: number;
 
-  accruedInterest: number;
+  interestThisYear: number;
 
-  balance: number;
+  totalInterest: number;
+
+  portfolioValue: number;
 }
 
 export interface InvestmentResult {
