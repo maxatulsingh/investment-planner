@@ -11,8 +11,15 @@ export interface InvestmentInput {
   frequency: CompoundFrequency;
 }
 
+export interface YearlyGrowth {
+  year: number;
+  value: number;
+  interest: number;
+}
+
 export interface InvestmentResult {
   futureValue: number;
   totalInterest: number;
   totalInvestment: number;
+  yearlyGrowth: YearlyGrowth[];
 }

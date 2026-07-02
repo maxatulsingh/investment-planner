@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-
+import GrowthChart from "./GrowthChart";
 import { calculateCompoundInterest } from "@/lib/calculations/compoundInterest";
 import { formatCurrency } from "@/lib/utils/currency";
 import { InvestmentInput } from "@/types/investment";
@@ -30,7 +30,7 @@ export default function Calculator() {
       [field]: value,
     }));
   }
-
+console.log(result.yearlyGrowth);
   return (
     <div className="rounded-2xl bg-white p-8 shadow-xl">
 
@@ -98,6 +98,8 @@ export default function Calculator() {
           title="Total Investment"
           value={formatCurrency(result.totalInvestment)}
         />
+
+        <GrowthChart data={result.yearlyGrowth} />
 
       </div>
 
