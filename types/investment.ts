@@ -1,25 +1,38 @@
-export type CompoundFrequency =
+export type CompoundingFrequency =
   | "Monthly"
   | "Quarterly"
   | "Half-Yearly"
   | "Yearly";
 
 export interface InvestmentInput {
-  principal: number;
+  initialInvestment: number;
+  monthlySip: number;
+  annualStepUp: number;
   annualRate: number;
   years: number;
-  frequency: CompoundFrequency;
+  frequency: CompoundingFrequency;
 }
 
 export interface YearlyGrowth {
   year: number;
-  value: number;
-  interest: number;
+
+  yearlyDeposit: number;
+
+  totalDeposits: number;
+
+  yearlyInterest: number;
+
+  accruedInterest: number;
+
+  balance: number;
 }
 
 export interface InvestmentResult {
   futureValue: number;
-  totalInterest: number;
+
   totalInvestment: number;
+
+  totalInterest: number;
+
   yearlyGrowth: YearlyGrowth[];
 }

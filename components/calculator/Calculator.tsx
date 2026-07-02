@@ -1,25 +1,29 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import GrowthChart from "./GrowthChart";
-import { calculateCompoundInterest } from "@/lib/calculations/compoundInterest";
-import { formatCurrency } from "@/lib/utils/currency";
+
 import { InvestmentInput } from "@/types/investment";
-import YearlyGrowthTable from "./YearlyGrowthTable";
+import { calculateInvestmentProjection } from "@/lib/calculations/investmentEngine";
+import { formatCurrency } from "@/lib/utils/currency";
+
 import InputField from "./InputField";
 import ResultCard from "./ResultCard";
+import GrowthChart from "./GrowthChart";
+import YearlyGrowthTable from "./YearlyGrowthTable";
 
 export default function Calculator() {
   const [form, setForm] = useState<InvestmentInput>({
-    principal: 100000,
+    initialInvestment: 100000,
+    monthlySip: 10000,
+    annualStepUp: 10,
     annualRate: 12,
     years: 20,
     frequency: "Monthly",
   });
 
-  const result = useMemo(() => {
-    return calculateCompoundInterest(form);
-  }, [form]);
+const result = useMemo(() => {
+  return calculateInvestmentProjection(form);
+}, [form]);
 
   function updateField<K extends keyof InvestmentInput>(
     field: K,
@@ -33,23 +37,33 @@ export default function Calculator() {
 
   return (
     <div className="rounded-2xl bg-white p-8 shadow-xl">
-
       <h2 className="mb-8 text-3xl font-bold text-slate-900">
-        Compound Interest Calculator
+        Investment Growth Calculator
       </h2>
 
       <div className="grid gap-6 md:grid-cols-2">
-
         <InputField
           label="Initial Investment (₹)"
-          value={form.principal}
-          onChange={(value) => updateField("principal", value)}
+          value={form.initialInvestment}
+          onChange={(value) => updateField("initialInvestment", value)}
         />
 
         <InputField
           label="Annual Return (%)"
           value={form.annualRate}
           onChange={(value) => updateField("annualRate", value)}
+        />
+
+        <InputField
+          label="Monthly SIP (₹)"
+          value={form.monthlySip}
+          onChange={(value) => updateField("monthlySip", value)}
+        />
+
+        <InputField
+          label="Annual Step-up (%)"
+          value={form.annualStepUp}
+          onChange={(value) => updateField("annualStepUp", value)}
         />
 
         <InputField
@@ -66,12 +80,9 @@ export default function Calculator() {
           <select
             value={form.frequency}
             onChange={(e) =>
-              updateField(
-                "frequency",
-                e.target.value as InvestmentInput["frequency"]
-              )
+              updateField("frequency", e.target.value as InvestmentInput["frequency"])
             }
-            className="w-full rounded-lg border border-slate-300 p-3 transition focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
+            className="w-full rounded-lg border border-slate-300 p-3 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
           >
             <option value="Monthly">Monthly</option>
             <option value="Quarterly">Quarterly</option>
@@ -79,45 +90,37 @@ export default function Calculator() {
             <option value="Yearly">Yearly</option>
           </select>
         </div>
-
       </div>
 
-   {/* Result Cards */}
+      {/* Result Cards */}
 
-<div className="mt-10 grid gap-4 md:grid-cols-3">
+      <div className="mt-10 grid gap-4 md:grid-cols-3">
+        <ResultCard
+          title="Future Value"
+          value={formatCurrency(result.futureValue)}
+          icon="💰"
+        />
 
-  <ResultCard
-    title="Future Value"
-    value={formatCurrency(result.futureValue)}
-    icon="💰"
-  />
+        <ResultCard
+          title="Interest Earned"
+          value={formatCurrency(result.totalInterest)}
+          icon="📈"
+        />
 
-  <ResultCard
-    title="Interest Earned"
-    value={formatCurrency(result.totalInterest)}
-    icon="📈"
-  />
+        <ResultCard
+          title="Total Invested"
+          value={formatCurrency(result.totalInvestment)}
+          icon="🏦"
+        />
+      </div>
 
-  <ResultCard
-    title="Principal"
-    value={formatCurrency(result.totalInvestment)}
-    icon="🏦"
-  />
+      {/* Growth Chart */}
 
-</div>
+      <GrowthChart data={result.yearlyGrowth} />
 
-{/* Chart */}
+      {/* Year-wise Table */}
 
-<GrowthChart
-  data={result.yearlyGrowth}
-/>
-
-{/* Table */}
-
-<YearlyGrowthTable
-  data={result.yearlyGrowth}
-/>
-
+      <YearlyGrowthTable data={result.yearlyGrowth} />
     </div>
   );
 }
