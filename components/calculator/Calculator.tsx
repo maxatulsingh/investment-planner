@@ -5,7 +5,7 @@ import GrowthChart from "./GrowthChart";
 import { calculateCompoundInterest } from "@/lib/calculations/compoundInterest";
 import { formatCurrency } from "@/lib/utils/currency";
 import { InvestmentInput } from "@/types/investment";
-
+import YearlyGrowthTable from "./YearlyGrowthTable";
 import InputField from "./InputField";
 import ResultCard from "./ResultCard";
 
@@ -30,7 +30,7 @@ export default function Calculator() {
       [field]: value,
     }));
   }
-console.log(result.yearlyGrowth);
+
   return (
     <div className="rounded-2xl bg-white p-8 shadow-xl">
 
@@ -82,26 +82,41 @@ console.log(result.yearlyGrowth);
 
       </div>
 
-      <div className="mt-10 grid gap-4 md:grid-cols-3">
+   {/* Result Cards */}
 
-        <ResultCard
-          title="Future Value"
-          value={formatCurrency(result.futureValue)}
-        />
+<div className="mt-10 grid gap-4 md:grid-cols-3">
 
-        <ResultCard
-          title="Interest Earned"
-          value={formatCurrency(result.totalInterest)}
-        />
+  <ResultCard
+    title="Future Value"
+    value={formatCurrency(result.futureValue)}
+    icon="💰"
+  />
 
-        <ResultCard
-          title="Total Investment"
-          value={formatCurrency(result.totalInvestment)}
-        />
+  <ResultCard
+    title="Interest Earned"
+    value={formatCurrency(result.totalInterest)}
+    icon="📈"
+  />
 
-        <GrowthChart data={result.yearlyGrowth} />
+  <ResultCard
+    title="Principal"
+    value={formatCurrency(result.totalInvestment)}
+    icon="🏦"
+  />
 
-      </div>
+</div>
+
+{/* Chart */}
+
+<GrowthChart
+  data={result.yearlyGrowth}
+/>
+
+{/* Table */}
+
+<YearlyGrowthTable
+  data={result.yearlyGrowth}
+/>
 
     </div>
   );
