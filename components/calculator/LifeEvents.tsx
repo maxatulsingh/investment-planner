@@ -12,6 +12,8 @@ type Props = {
   onDelete: (id: string) => void;
 };
 
+
+
 export default function LifeEvents({
   events,
   onAdd,
@@ -114,14 +116,22 @@ export default function LifeEvents({
       </td>
 
       <td className="p-3">
-        <input
-          type="text"
-          value={event.title}
-          onChange={(e) =>
-            onUpdate(event.id, "title", e.target.value)
-          }
-          className="w-full rounded border p-2"
-        />
+        <select
+  value={event.eventType}
+  onChange={(e) =>
+    onUpdate(event.id, "eventType", e.target.value)
+  }
+  className="w-full rounded border p-2"
+>
+  <option value="Education">🎓 Child Education</option>
+  <option value="House">🏠 House Purchase</option>
+  <option value="Wedding">💍 Wedding</option>
+  <option value="Car">🚗 Car Purchase</option>
+  <option value="Vacation">✈️ Vacation</option>
+  <option value="Retirement">🌴 Retirement</option>
+  <option value="Bonus">💰 Bonus</option>
+  <option value="Other">📝 Other</option>
+</select>
       </td>
 
       <td className="p-3">

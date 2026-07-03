@@ -17,9 +17,11 @@ export interface LifeEvent {
 
   year: number;
 
-  timing: EventTiming;
+  timing: "Beginning" | "End";
 
-  type: EventType;
+  type: "Deposit" | "Withdrawal";
+
+  eventType: LifeEventType;
 
   title: string;
 
@@ -62,3 +64,13 @@ export interface InvestmentResult {
 
   yearlyGrowth: YearlyGrowth[];
 }
+
+export type LifeEventType =
+  | "Education"
+  | "House"
+  | "Wedding"
+  | "Car"
+  | "Vacation"
+  | "Retirement"
+  | "Bonus"
+  | "Other";

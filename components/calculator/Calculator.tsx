@@ -24,13 +24,14 @@ const [form, setForm] = useState<InvestmentInput>({
 
 lifeEvents: [
   {
-    id: crypto.randomUUID(),
-    year: 15,
-    timing: "Beginning",
-    type: "Withdrawal",
-    title: "Child Education",
-    amount: 1000000,
-  },
+  id: crypto.randomUUID(),
+  year: 10,
+  timing: "End",
+  type: "Withdrawal",
+  eventType: "Education",
+  title: "Child Education",
+  amount: 100000,
+},
 ],
 });
 
@@ -65,14 +66,15 @@ const result = useMemo(() => {
 }
 
   function addLifeEvent() {
-  const newEvent = {
-    id: crypto.randomUUID(),
-    year: 1,
-    timing: "Beginning" as const,
-    type: "Withdrawal" as const,
-    title: "New Event",
-    amount: 100000,
-  };
+ const newEvent = {
+  id: crypto.randomUUID(),
+  year: 1,
+  timing: "Beginning" as const,
+  type: "Withdrawal" as const,
+  eventType: "Education" as const,
+  title: "Child Education",
+  amount: 100000,
+};
 
   setForm((prev) => ({
     ...prev,
@@ -193,7 +195,10 @@ function deleteLifeEvent(id: string) {
 
       {/* Growth Chart */}
 
-      <GrowthChart data={result.yearlyGrowth} />
+      <GrowthChart
+  data={result.yearlyGrowth}
+  events={form.lifeEvents}
+/>
 
       {/* Year-wise Table */}
 
